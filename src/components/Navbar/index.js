@@ -6,6 +6,9 @@ const Navbar = ({
   setIsLoggedIn,
   setGreetingName,
   setShowForm,
+  showForm,
+  showHome,
+  setShowHome,
 }) => {
   return (
     <div className='navbar'>
@@ -55,10 +58,16 @@ const Navbar = ({
             <button
               className={`btn`}
               onClick={() => {
-                setFormType('edit-profile');
-                setShowForm(true);
+                if (showHome) {
+                  setFormType('edit-profile');
+                  setShowForm(true);
+                  setShowHome(false);
+                } else {
+                  setShowForm(false);
+                  setShowHome(true);
+                }
               }}>
-              edit profile
+              {showForm ? 'home' : 'edit profile'}
             </button>
           </>
         )}

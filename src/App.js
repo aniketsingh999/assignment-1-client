@@ -19,7 +19,8 @@ function App() {
   const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
   const [newPassword, setNewPassword] = useState('');
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
-  const [showForm, setShowForm] = useState(true);
+  const [showForm, setShowForm] = useState(!isLoggedIn);
+  const [showHome, setShowHome] = useState(isLoggedIn);
 
   const state = {
     name,
@@ -48,6 +49,8 @@ function App() {
     setUser,
     showForm,
     setShowForm,
+    showHome,
+    setShowHome,
   };
 
   useEffect(() => {
@@ -55,9 +58,12 @@ function App() {
     localStorage.setItem('greetingName', isLoggedIn ? greetingName : '');
     if (isLoggedIn) {
       localStorage.setItem('authToken', authToken);
+      setShowHome(true);
     } else {
       setAuthToken('');
       localStorage.removeItem('authToken');
+      setShowHome(false);
+      setShowForm(true);
     }
   }, [isLoggedIn]);
 
