@@ -35,6 +35,9 @@ const Form = ({
     msg: '',
   });
 
+  const [offHoursStartTimestamp, setOffHoursStartTimestamp] = useState('');
+  const [offHoursDuration, setOffHoursDuration] = useState(1);
+
   useEffect(() => {
     if (alert.show) {
       const timeoutID = setTimeout(() => {
@@ -159,6 +162,19 @@ const Form = ({
           setAuthToken(res.data.authToken);
           setUser(res.data.user);
         }
+
+        if (offHoursStartTimestamp && offHoursDuration) {
+          const res = await axios.patch(`${serverURL}/user/offHours`, {
+            authToken,
+            offHoursStartTimestamp: new Date(offHoursStartTimestamp).getTime(),
+            offHoursDuration,
+          });
+          setAlert({
+            show: true,
+            type: 'success',
+            msg: 'off hours recorded successfully',
+          });
+        }
       } catch (err) {
         console.log(err);
       }
@@ -257,19 +273,55 @@ const Form = ({
         )}
 
         {formType === 'edit-profile' && (
-          <div className='form-row'>
-            <label htmlFor='newPassword' className='form-label'>
-              new password
-            </label>
-            <input
-              type='password'
-              name='newPassword'
-              id='newPassword'
-              className='form-input'
-              value={newPassword}
-              onChange={(evt) => setNewPassword(evt.target.value)}
-            />
-          </div>
+          <>
+            <div className='form-row'>
+              <label htmlFor='newPassword' className='form-label'>
+                new password
+              </label>
+              <input
+                type='password'
+                name='newPassword'
+                id='newPassword'
+                className='form-input'
+                value={newPassword}
+                onChange={(evt) => setNewPassword(evt.target.value)}
+              />
+            </div>
+
+            <div className='form-row'>
+              <label htmlFor='offHoursStartTimestamp' className='form-label'>
+                Off Hours Start Time
+              </label>
+              <input
+                type='datetime-local'
+                name='offHoursStartTimestamp'
+                id='offHoursStartTimestamp'
+                className='form-input'
+                value={offHoursStartTimestamp}
+                onChange={(evt) => {
+                  setOffHoursStartTimestamp(evt.target.value);
+                }}
+              />
+            </div>
+
+            <div className='form-row'>
+              <label htmlFor='offHoursDuration' className='form-label'>
+                duration in minutes
+              </label>
+              <input
+                type='number'
+                name='offHoursDuration'
+                id='offHoursDuration'
+                className='form-input'
+                value={offHoursDuration}
+                min={1}
+                max={600}
+                onChange={(evt) => {
+                  setOffHoursDuration(evt.target.value);
+                }}
+              />
+            </div>
+          </>
         )}
 
         {formType === 'signup' && (
