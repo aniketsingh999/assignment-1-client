@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Form from './components/Form';
+import Home from './components/Home';
 import Navbar from './components/Navbar';
 
 function App() {
@@ -74,7 +75,8 @@ function App() {
   return (
     <>
       <Navbar {...state} />
-      <Form {...state} />
+      {showForm && <Form {...state} />}
+      {showHome && <Home {...state} />}
     </>
   );
 }
