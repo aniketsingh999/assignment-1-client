@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const serverURL = `${process.env.REACT_APP_BACKEND_URL}/auth`;
+const serverURL = `${process.env.REACT_APP_BACKEND_URL}`;
 
 const Form = ({
   formType,
@@ -60,7 +60,7 @@ const Form = ({
         return;
       }
       try {
-        const res = await axios.post(serverURL + '/register', {
+        const res = await axios.post(serverURL + '/auth/register', {
           name,
           email,
           password,
@@ -83,7 +83,7 @@ const Form = ({
       }
     } else if (formType === 'verification') {
       try {
-        const res = await axios.get(`${serverURL}/verifyEmail/${token}`);
+        const res = await axios.get(`${serverURL}/auth/verifyEmail/${token}`);
         setAlert({
           show: true,
           type: 'success',
@@ -103,7 +103,7 @@ const Form = ({
       }
     } else if (formType === 'login') {
       try {
-        const res = await axios.post(`${serverURL}/login/`, {
+        const res = await axios.post(`${serverURL}/auth/login/`, {
           email,
           password,
         });
@@ -145,7 +145,7 @@ const Form = ({
           setUser(res.data.user);
         }
         if (password && newPassword) {
-          const res = await axios.patch(`${serverURL}/user/updateName`, {
+          const res = await axios.patch(`${serverURL}/user/updatePassword`, {
             password,
             newPassword,
             authToken,
@@ -159,7 +159,9 @@ const Form = ({
           setAuthToken(res.data.authToken);
           setUser(res.data.user);
         }
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     }
     clearAll();
   };
